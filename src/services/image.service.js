@@ -3,18 +3,28 @@ var stream = require('stream');
 const formatter = require('../utils/formatter.js');
 const validator = require('../validators/general.validator.js');
 const response = require('../constants/response.constants.js');
+
+const securityService = require('./secuity.service.js');
+
 const db = require('../config/db.config.js');
 const Image = db.images;
 
 module.exports = {
-    postImage(userId, file, isPrivate) {
+    async postImage(userId, image, isPrivate) {
+        var imageBuffer = image.buffer;
+
+        // Encrpyt the image prior to upload if permissions set to private
+        if (isPrivate) {
+            imageBuffer = await securityService.encryptImage(userId, imageBuffer);
+        }
+
         return new Promise((resolve, reject) => {
             Image.create({
-                type: file.mimetype,
-                name: file.originalname,
+                type: image.mimetype,
+                name: image.originalname,
                 isPrivate: isPrivate,
                 userId: userId,
-                data: file.buffer
+                data: imageBuffer
             }).then((data) => {
                 resolve(formatter.formatResponse('Image successfully added', {imageId: data.id}, response.SUCCESS));
             }).catch(err => {
@@ -23,13 +33,13 @@ module.exports = {
         });
     },
 
-    getImage(userId, imageId) {
+    async getImage(userId, imageId) {
         return new Promise((resolve, reject) => {
             Image.findAll({
                 where: {
                     id: imageId
                 }
-            }).then(data => {
+            }).then(async data => {
                 // Check if we found any data
                 if (data.length === 0) {
                     reject(formatter.formatResponse('No image with image-id=' + imageId + ' was found', null, response.NOT_FOUND));
@@ -41,8 +51,15 @@ module.exports = {
                 if (!validator.hasImagePermission(file, userId)) {
                     reject(formatter.formatResponse('No permission', 'Image is private. User does not have permission for this image.', response.NO_PERMISSION));
                 }
+
+                // Decrpyt image if permissions are set to private
+                var imageBuffer = file.data;
+                if (file.isPrivate) {
+                    imageBuffer = await securityService.decrpytImage(userId, file.data);
+                }
     
-                var fileContents = Buffer.from(file.data, "base64");
+                // Prepare data to transmit
+                var fileContents = Buffer.from(imageBuffer, "base64");
                 var readStream = new stream.PassThrough();
                 readStream.end(fileContents);
                 resolve({readStream: readStream, file: file});

@@ -26,8 +26,9 @@ A simple backend image repository web app powered by NodeJS and PostgreSQL.
             - Entry in header: `authorization: Basic MTpwYXNzd29yZA`
 #### User
 - `POST http://localhost:8080/user` 
-    - Create a new user. Returns the new user id
-    - **Request requirements**: no additional fields
+    - Create a new user. Returns the new user id and password
+    - **Request requirements**:
+        - Body: `password` (desired password for the user)
 - `GET http://localhost:8080/user`
     - Get all users in the database. Returns a list of user objects in the database
     - **Request requirements**: no additional fields

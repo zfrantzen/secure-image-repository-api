@@ -1,4 +1,5 @@
 const util = require('../utils/util.js');
+const formatter = require('../utils/formatter.js');
 
 function valueChecker(objectToCheck, fieldsToCheck, shouldBeInts) {
     valueError = [];
@@ -32,60 +33,60 @@ function diffChecker(expected, actual, fieldName) {
     return diffError;
 };
 
-function pushError(error, result) {
+function pushError(error, errorList) {
     if (error.length !== 0) {
-        result.isValid = false;
-        result.messages.push(error);
+        errorList.push(error);
     }
 };
 
 module.exports = {
     
-    // Confirms that all required parameters are present and are valid ints
+    // Confirms that all required parameters are present and are valid ints. Throws exception with error
+    // message if some parameter are not as expected.
+    //
     // Possible input pairs in args include:
     //    - expectedHeaders (list), actualHeaders, intHeaders
     //    - expectedBody (list), actualBody, intBody
     //    - expectedQuery (list), actualQuery, intQuery
     //    - imagePresent (boolean) and image
     validateRequest : (args) => {
-        var result = {
-            isValid: true,
-            messages: []
-        };
+        var errors = [];
 
         // Check header parameters (if applicable)
         if (args.expectedHeaders !== undefined && args.actualHeaders !== undefined) {
             pushError(
                 diffChecker(args.expectedHeaders, args.actualHeaders.length !== 0 ? Object.keys(args.actualHeaders) : [], 'header'),
-                result
+                errors
             );
-            pushError(valueChecker(args.actualHeaders, args.expectedHeaders, args.intHeaders !== undefined ? args.intHeaders : true), result);
+            pushError(valueChecker(args.actualHeaders, args.expectedHeaders, args.intHeaders !== undefined ? args.intHeaders : true), errors);
         }
 
         // Check body parameters (if applicable)
         if (args.expectedBody !== undefined && args.actualBody !== undefined) {
             pushError(
                 diffChecker(args.expectedBody, args.actualBody.length !== 0 ? Object.keys(args.actualBody) : [], 'body'),
-                result
+                errors
             );
-            pushError(valueChecker(args.actualBody, args.expectedBody, args.intBody !== undefined ? args.intBody : true), result);
+            pushError(valueChecker(args.actualBody, args.expectedBody, args.intBody !== undefined ? args.intBody : true), errors);
         }
 
         // Check query parameters (if applicable)
         if (args.expectedQuery !== undefined && args.actualQuery !== undefined) {
             pushError(
                 diffChecker(args.expectedQuery, args.actualQuery.length !== 0 ? Object.keys(args.actualQuery) : [], 'query'),
-                result
+                errors
             );
-            pushError(valueChecker(args.actualQuery, args.expectedQuery, args.intQuery !== undefined ? args.intQuery : true), result);
+            pushError(valueChecker(args.actualQuery, args.expectedQuery, args.intQuery !== undefined ? args.intQuery : true), errors);
         }
 
         // Check image (if applicable)
         if (args.imagePresent !== undefined && args.image === undefined) {
-            pushError("Valid 'image' was expected as body paramter (via form-data), however, was not provided", result)
+            pushError("Valid 'image' was expected as body paramter (via form-data), however, was not provided", errors)
         }
 
-        return result;
+        if (errors.length !== 0) {
+            throw formatter.formatResponse('Request field error!', validResult.messages, response.INVALID_REQUEST);
+        }
     },
 
     // Check if a user has permission to access a image

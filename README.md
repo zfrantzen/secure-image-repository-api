@@ -35,11 +35,11 @@ A simple backend image repository web app powered by NodeJS and PostgreSQL.
     - **Request requirements**: 
         - Header: `authorization basic <credentials>` (requester's credentials, formatted `userId:password` encoded in Base64) 
         - Body: `image` (file to upload), `is-private` (true or false, sets privacy permission)
-- `GET http://localhost:8080/image?image-id={targetImageId}`
+- `GET http://localhost:8080/image?image-id={target-image-id}`
     - Gets an uploaded image with imageId {targetImageId} (if the requesting user has permission)
     - **Request requirements**: 
        - Header: `authorization basic <credentials>` (requester's credentials, formatted `userId:password` encoded in Base64) 
-- `GET http://localhost:8080/image/info?image-id={targetImageId}`
+- `GET http://localhost:8080/image/info?image-id={target-image-id}`
     - Gets metadata information of an uploaded image with imageId {targetImageId} (if the requesting user has permission)
     - **Request requirements**: 
         - Header: `authorization basic <credentials>` (requester's credentials, formatted `userId:password` encoded in Base64) 
@@ -47,8 +47,8 @@ A simple backend image repository web app powered by NodeJS and PostgreSQL.
     - Gets metadata information of all uploaded image for the requesting user
     - **Request requirements**: 
         - Header: `authorization basic <credentials>` (requester's credentials, formatted `userId:password` encoded in Base64) 
-- `DELETE http://localhost:8080/image/{imageId}`
-    - Deletes an image with imageId from the database (if the requesting user has permission)
+- `DELETE http://localhost:8080/image/{target-image-id}`
+    - Deletes an image with imageId of target-image-id from the database (if the requesting user has permission)
     - **Request requirements**:
         - Header: `authorization basic <credentials>` (requester's credentials, formatted `userId:password` encoded in Base64) 
 

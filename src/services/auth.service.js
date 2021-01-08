@@ -14,7 +14,11 @@ module.exports = {
         let userId = decodedCredentials[0];
         let password = decodedCredentials[1];
 
-        // Check and compare with database
+        // Confirm userId exists 
+        // TODO: get from database via user service
+        // user = userService(userId);
+
+        // Check that the passwords match
         // TODO
 
         return userId;

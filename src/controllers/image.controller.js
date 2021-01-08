@@ -15,7 +15,7 @@ module.exports = {
             });
 
             // Authenticate user
-            let userId = authService.authenticateUser(req.headers['authorization']);
+            let userId = await authService.authenticateUser(req.headers['authorization']);
 
             // Execute post
             await imageService.postImage(
@@ -38,7 +38,7 @@ module.exports = {
             });
 
             // Authenticate user
-            userId = authService.authenticateUser(req.headers['authorization']);
+            userId = await authService.authenticateUser(req.headers['authorization']);
 
             // Execute query
             await imageService.getImage(
@@ -61,7 +61,7 @@ module.exports = {
             validator.validateRequest({expectedHeaders: ['authorization'], actualHeaders: req.headers, intHeaders: false});
 
             // Authenticate user
-            userId = authService.authenticateUser(req.headers['authorization']);
+            userId = await authService.authenticateUser(req.headers['authorization']);
 
             // Route request to appropraite handler service function
             if (req.query['image-id'] !== undefined) {
@@ -87,7 +87,7 @@ module.exports = {
             validator.validateRequest({expectedHeaders: ['authorization'], actualHeaders: req.headers, intHeaders: false});
 
             // Authenticate user
-            userId = authService.authenticateUser(req.headers['authorization']);
+            userId = await authService.authenticateUser(req.headers['authorization']);
 
             // Execute delete
             await imageService.deleteImage(

@@ -1,7 +1,9 @@
+const userService = require('./user.service.js');
+
 module.exports = {
 
     // Returns userId upon success, throws error otherwise
-    authenticateUser : (encodedBase64Credentials) => {
+    authenticateUser : async (encodedBase64Credentials) => {
         // Remove unneeded prefacing data
         encodedBase64Credentials = encodedBase64Credentials.split("Basic").pop().trim();
         
@@ -15,11 +17,15 @@ module.exports = {
         let password = decodedCredentials[1];
 
         // Confirm userId exists 
-        // TODO: get from database via user service
-        // user = userService(userId);
-
-        // Check that the passwords match
-        // TODO
+        await userService.getUser(userId)
+        .then(data => {
+            // Check that the passwords match
+            if (password !== data.detail[0].pwrd) {
+                throw ('User password is incorrect!')
+            }
+        }, () => {
+            throw ('User with userId=' + userId + ' could not be found!');
+        });
 
         return userId;
     }

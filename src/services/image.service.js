@@ -73,7 +73,7 @@ module.exports = {
                     reject(formatter.formatResponse('No permission', 'Image is private. User does not have permission for this image.', response.NO_PERMISSION));
                 }
         
-                resolve(formatter.formatResponse('Image found', data, response.SUCCESS));
+                resolve(formatter.formatResponse('Image with image-id=' + imageId + ' found', data, response.SUCCESS));
             }).catch(err => {
                 reject(formatter.formatResponse('Query error!', err, response.GENERIC_SERVER_ERROR));
             });
@@ -95,7 +95,7 @@ module.exports = {
                     reject(formatter.formatResponse('No images for user with userId=' + userId + ' were found', null, response.NOT_FOUND));
                 }
         
-                resolve(formatter.formatResponse('Images found', data, response.SUCCESS));
+                resolve(formatter.formatResponse('User images found', data, response.SUCCESS));
             }).catch(err => {
                 reject(formatter.formatResponse('Query Error!', err, response.GENERIC_SERVER_ERROR));
             });

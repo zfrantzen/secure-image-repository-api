@@ -1,17 +1,8 @@
-const response = require('../constants/response.constants.js');
 const validator = require('../validators/general.validator.js');
+const util = require('../utils/util.js');
 
 const authService = require('../services/auth.service.js');
 const imageService = require('../services/image.service.js');
-
-function handleError(err, res) {
-    if (err.status !== undefined) {
-        res.status(err.status).json(err);
-    }
-    else {
-        res.status(response.GENERIC_SERVER_ERROR).json(err);
-    }
-};
 
 module.exports = {
     async postImageController(req, res) {
@@ -34,7 +25,7 @@ module.exports = {
             ).then(result => res.json(result));
         }
         catch(err) {
-            handleError(err, res);
+            util.handleError(err, res);
         }
     },
 
@@ -60,7 +51,7 @@ module.exports = {
             });
         }
         catch(err) {
-            handleError(err, res);
+            util.handleError(err, res);
         }
     },
 
@@ -86,7 +77,7 @@ module.exports = {
             }
         }
         catch(err) {
-            handleError(err, res);
+            util.handleError(err, res);
         }
     },
 
@@ -105,7 +96,7 @@ module.exports = {
             ).then(result => res.json(result));
         }
         catch(err) {
-            handleError(err, res);
+            util.handleError(err, res);
         }
     }
 };

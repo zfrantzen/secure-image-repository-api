@@ -1,21 +1,33 @@
-const response = require('../constants/response.constants.js');
-const db = require('../config/db.config.js');
-const User = db.users;
+const validator = require('../validators/general.validator.js');
+const util = require('../utils/util.js');
+
+const userService = require('../services/user.service.js');
 
 module.exports = {
-    postUser : (req, res) => {
-        User.create().then((data) => {
-            res.json({msg: 'User Successfully Generated', userId: data.id})
-        }).catch(err => {
-            res.status(response.GENERIC_SERVER_ERROR).json({msg: 'Error', detail: err});
-        });
+    async postUserController(req, res) {
+        try {
+            // Validate request fields
+            validator.validateRequest({
+                expectedBody: ['password'], actualBody: req.body, intBody: false
+            });
+
+            // Execute post
+            await userService.postUser(
+                req.body.password
+            ).then(result => res.json(result));
+        }
+        catch(err) {
+            util.handleError(err, res);
+        }
     },
 
-    getAllUsers : (req, res) => {
-        User.findAll().then(data => {
-            res.json(data)
-        }).catch(err => {
-            res.status(response.GENERIC_SERVER_ERROR).json({msg: 'Error', detail: err});
-        });
+    async getAllUsersController(req, res) {
+        try {
+            // Execute query
+            await userService.getAllUsers().then(result => res.json(result));
+        }
+        catch(err) {
+            util.handleError(err, res);
+        }
     }
 };

@@ -1,3 +1,5 @@
+const response = require('../constants/response.constants.js');
+
 module.exports = {
 
     // Returns a list of elements in the baseList but not in the
@@ -16,5 +18,14 @@ module.exports = {
         }
 
         return result;
+    },
+
+    handleError : (err, res) => {
+        if (err.status !== undefined) {
+            res.status(err.status).json(err);
+        }
+        else {
+            res.status(response.GENERIC_SERVER_ERROR).json(err);
+        }
     }
 }

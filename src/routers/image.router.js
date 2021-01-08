@@ -1,15 +1,15 @@
 let express = require('express');
 let router = express.Router();
-let upload = require('../config/multer.config.js');
+let multer = require('../config/multer.config.js');
  
 const imageWorker = require('../controllers/image.controller.js');
 
-router.post('/image', upload.single("image"), imageWorker.postImageController);
+router.post('/image', multer.single("image"), imageWorker.postImageController);
  
-router.get('/image', upload.none(), imageWorker.getImageController);
+router.get('/image', multer.none(), imageWorker.getImageController);
 
-router.get('/image/info', upload.none(), imageWorker.getImageInfoController);
+router.get('/image/info', multer.none(), imageWorker.getImageInfoController);
 
-router.delete('/image/:imageId', upload.none(), imageWorker.deleteImageController);
+router.delete('/image/:imageId', multer.none(), imageWorker.deleteImageController);
  
 module.exports = router;

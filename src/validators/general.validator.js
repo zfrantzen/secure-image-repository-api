@@ -1,5 +1,6 @@
 const util = require('../utils/util.js');
 const formatter = require('../utils/formatter.js');
+const response = require('../constants/response.constants.js');
 
 function valueChecker(objectToCheck, fieldsToCheck, shouldBeInts) {
     valueError = [];
@@ -52,8 +53,12 @@ module.exports = {
     validateRequest : (args) => {
         var errors = [];
 
+        args.actualHeaders = args.actualHeaders !== undefined ? args.actualHeaders : {};
+        args.actualBody = args.actualBody !== undefined ? args.actualBody : {};
+        args.actualQuery = args.actualQuery !== undefined ? args.actualQuery : {};
+
         // Check header parameters (if applicable)
-        if (args.expectedHeaders !== undefined && args.actualHeaders !== undefined) {
+        if (args.expectedHeaders !== undefined) {
             pushError(
                 diffChecker(args.expectedHeaders, args.actualHeaders.length !== 0 ? Object.keys(args.actualHeaders) : [], 'header'),
                 errors
@@ -62,7 +67,7 @@ module.exports = {
         }
 
         // Check body parameters (if applicable)
-        if (args.expectedBody !== undefined && args.actualBody !== undefined) {
+        if (args.expectedBody !== undefined) {
             pushError(
                 diffChecker(args.expectedBody, args.actualBody.length !== 0 ? Object.keys(args.actualBody) : [], 'body'),
                 errors
@@ -71,7 +76,7 @@ module.exports = {
         }
 
         // Check query parameters (if applicable)
-        if (args.expectedQuery !== undefined && args.actualQuery !== undefined) {
+        if (args.expectedQuery !== undefined) {
             pushError(
                 diffChecker(args.expectedQuery, args.actualQuery.length !== 0 ? Object.keys(args.actualQuery) : [], 'query'),
                 errors
@@ -85,7 +90,7 @@ module.exports = {
         }
 
         if (errors.length !== 0) {
-            throw formatter.formatResponse('Request field error!', validResult.messages, response.INVALID_REQUEST);
+            throw formatter.formatResponse('Request field error!', errors, response.INVALID_REQUEST);
         }
     },
 

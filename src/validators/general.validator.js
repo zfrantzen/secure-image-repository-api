@@ -43,11 +43,11 @@ module.exports = {
     
     // Confirms that all required parameters are present and are valid ints
     // Possible input pairs in args include:
-    //    - expectedHeaders (list) and actualHeaders 
-    //    - expectedBody (list) and actualBody
-    //    - expectedQuery (list) and actualQuery
+    //    - expectedHeaders (list), actualHeaders, intHeaders
+    //    - expectedBody (list), actualBody, intBody
+    //    - expectedQuery (list), actualQuery, intQuery
     //    - imagePresent (boolean) and image
-    validateRequest : (args, shouldBeInt=true) => {
+    validateRequest : (args) => {
         var result = {
             isValid: true,
             messages: []
@@ -59,7 +59,7 @@ module.exports = {
                 diffChecker(args.expectedHeaders, args.actualHeaders.length !== 0 ? Object.keys(args.actualHeaders) : [], 'header'),
                 result
             );
-            pushError(valueChecker(args.actualHeaders, args.expectedHeaders, shouldBeInt), result);
+            pushError(valueChecker(args.actualHeaders, args.expectedHeaders, args.intHeaders !== undefined ? args.intHeaders : true), result);
         }
 
         // Check body parameters (if applicable)
@@ -68,7 +68,7 @@ module.exports = {
                 diffChecker(args.expectedBody, args.actualBody.length !== 0 ? Object.keys(args.actualBody) : [], 'body'),
                 result
             );
-            pushError(valueChecker(args.actualBody, args.expectedBody, shouldBeInt), result);
+            pushError(valueChecker(args.actualBody, args.expectedBody, args.intBody !== undefined ? args.intBody : true), result);
         }
 
         // Check query parameters (if applicable)
@@ -77,7 +77,7 @@ module.exports = {
                 diffChecker(args.expectedQuery, args.actualQuery.length !== 0 ? Object.keys(args.actualQuery) : [], 'query'),
                 result
             );
-            pushError(valueChecker(args.actualQuery, args.expectedQuery, shouldBeInt), result);
+            pushError(valueChecker(args.actualQuery, args.expectedQuery, args.intQuery !== undefined ? args.intQuery : true), result);
         }
 
         // Check image (if applicable)

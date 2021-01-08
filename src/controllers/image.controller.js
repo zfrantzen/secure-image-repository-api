@@ -30,11 +30,12 @@ function getSingleImageInfo(imageId, userId, res) {
             }
         }
     ).then(data => {
-        // Confirm file permissions
-        if (data.isPrivate && userId != data.userId) {
+        // Confirm image permissions
+        if (!validator.hasImagePermission(data, userId)) {
             res.status(response.NO_PERMISSION).json({msg: 'Image is private. User does not have permission for this image.'});
             return;
         }
+
         res.json(data);
     }).catch(err => {
         res.status(response.GENERIC_SERVER_ERROR).json({msg: 'Error', detail: err});
@@ -43,6 +44,18 @@ function getSingleImageInfo(imageId, userId, res) {
 
 module.exports = {
     postImage : (req, res) => {
+        // Validate request fields
+        let validResult = validator.validateRequest({
+            expectedHeaders: ['user-id'], actualHeaders: req.headers, 
+            expectedBody: ['is-private'], actualBody: req.body,
+            imagePresent: true, image: req.file
+        });
+        if (!validResult.isValid) {
+            res.status(response.INVALID_REQUEST).json({msg: validResult.messages});
+            return;
+        }
+
+        // Execute post
         Image.create({
             type: req.file.mimetype,
             name: req.file.originalname,
@@ -57,21 +70,32 @@ module.exports = {
     },
 
     getImage : (req, res) => {
+        // Validate request fields
+        let validResult = validator.validateRequest({
+            expectedHeaders: ['user-id'], actualHeaders: req.headers, 
+            expectedQuery: ['image-id'], actualQuery: req.query
+        });
+        if (!validResult.isValid) {
+            res.status(response.INVALID_REQUEST).json({msg: validResult.messages});
+            return;
+        }
+        
+        // Execute query
         Image.findAll({
             where: {
                 id: req.query['image-id']
             }
         }).then(reqResp => {
-            const file = reqResp[0].dataValues;
-
             // Check if we found any data
-            if (file.length === 0) {
-                res.json(file);
+            if (reqResp.length === 0) {
+                res.json({msg: 'No image with image-id=' + req.query['image-id'] + ' found'});
                 return;
             }
+
+            const file = reqResp[0].dataValues;
             
             // Confirm file permissions
-            if (file.isPrivate && req.headers['user-id'] != file.userId) {
+            if (!validator.hasImagePermission(file, req.headers['user-id'])) {
                 res.status(response.NO_PERMISSION).json({msg: 'Image is private. User does not have permission for this image.'});
                 return;
             }
@@ -91,9 +115,9 @@ module.exports = {
 
     getImageInfo : (req, res) => {
         // Validate request fields
-        let validResult = validator.allPresentIntValidator(['user-id'], req.headers);
+        let validResult = validator.validateRequest({expectedHeaders: ['user-id'], actualHeaders: req.headers});
         if (!validResult.isValid) {
-            res.json(validResult.message);
+            res.status(response.INVALID_REQUEST).json({msg: validResult.messages});
             return;
         }
 
@@ -114,10 +138,18 @@ module.exports = {
     },
 
     deleteImage : (req, res) => {
+        // Validate request fields
+        let validResult = validator.validateRequest({expectedHeaders: ['user-id'], actualHeaders: req.headers});
+        if (!validResult.isValid) {
+            res.status(response.INVALID_REQUEST).json({msg: validResult.messages});
+            return;
+        }
+
+        // Execute delete
         Image.destroy({
             where: {
                 userId: req.headers['user-id'],
-                id: req.params['image-id']
+                id: req.params.imageId
             }
         }).then(() => {
             res.sendStatus(response.SUCCESS);

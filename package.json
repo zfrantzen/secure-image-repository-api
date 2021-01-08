@@ -1,0 +1,27 @@
+{
+  "name": "image-repo-web-app",
+  "version": "1.0.0",
+  "description": "A simple backend image repository web app hosted on Heroku powered by NodeJS and PostgreSQL",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zfrantzen/image-repo-web-app.git"
+  },
+  "author": "Zane Frantzen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zfrantzen/image-repo-web-app/issues"
+  },
+  "homepage": "https://github.com/zfrantzen/image-repo-web-app#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "multer": "^1.4.2",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.5"
+  }
+}

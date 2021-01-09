@@ -1,13 +1,13 @@
-const validator = require('../validators/general.validator.js');
 const util = require('../utils/util.js');
 
 const userService = require('../services/user.service.js');
+const validatorService = require('../services/validator.service.js');
 
 module.exports = {
     async postUserController(req, res) {
         try {
             // Validate request fields
-            validator.validateRequest({
+            validatorService.validateRequest({
                 expectedBody: ['password'], actualBody: req.body, intBody: false
             });
 

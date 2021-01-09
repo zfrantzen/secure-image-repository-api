@@ -24,6 +24,8 @@ A simple backend image repository web app powered by NodeJS and PostgreSQL.
         - If not using Postman, an example authentication entry located in the header is:
             - Actual value: `1:password` (repersenting userId=1 and userPassword=password)
             - Entry in header: `authorization: Basic MTpwYXNzd29yZA`
+    - Screenshots of common request operations in Postman can be found below this section
+
 #### User
 - `POST http://localhost:8080/user` 
     - Create a new user. Returns the new user id and password
@@ -39,6 +41,11 @@ A simple backend image repository web app powered by NodeJS and PostgreSQL.
     - **Request requirements**: 
         - Header: `authorization: Basic <credentials>` (requester's credentials, formatted `userId:password` encoded in Base64) 
         - Body: `image` (file to upload), `is-private` (true or false, sets privacy permission)
+- `PUT http://localhost:8080/image/transfer`
+    - Transfers an image owned by the requesting user to a target user
+    - **Request requirements**:
+        - Header: `authorization: Basic <credentials>` (requester's credentials, formatted `userId:password` encoded in Base64) 
+        - Body: `send-to-user-id` (userId of user to transfer image to), `image-id` (image to transfer that is owned currently by the requesting user)
 - `GET http://localhost:8080/image?image-id={target-image-id}`
     - Gets an uploaded image with imageId {targetImageId} (if the requesting user has permission)
     - **Request requirements**: 
@@ -55,8 +62,3 @@ A simple backend image repository web app powered by NodeJS and PostgreSQL.
     - Deletes an image with imageId of target-image-id from the database (if the requesting user has permission)
     - **Request requirements**:
         - Header: `authorization: Basic <credentials>` (requester's credentials, formatted `userId:password` encoded in Base64) 
-
-
-
-
-

@@ -1,14 +1,14 @@
-const validator = require('../validators/general.validator.js');
 const util = require('../utils/util.js');
 
 const authService = require('../services/auth.service.js');
+const validatorService = require('../services/validator.service.js');
 const imageService = require('../services/image.service.js');
 
 module.exports = {
     async postImageController(req, res) {
         try {
             // Validate request fields
-            validator.validateRequest({
+            validatorService.validateRequest({
                 expectedHeaders: ['authorization'], actualHeaders: req.headers, intHeaders: false,
                 expectedBody: ['is-private'], actualBody: req.body,
                 imagePresent: true, image: req.file
@@ -29,10 +29,33 @@ module.exports = {
         }
     },
 
+    async putImageTransferController(req, res) {
+        try {
+             // Validate request fields
+             validatorService.validateRequest({
+                expectedHeaders: ['authorization'], actualHeaders: req.headers, intHeaders: false,
+                expectedBody: ['send-to-user-id', 'image-id'], actualBody: req.body
+            });
+
+            // Authenticate user
+            userId = await authService.authenticateUser(req.headers['authorization']);
+
+            // Execute transfer
+            await imageService.transferImage(
+                userId,
+                req.body['send-to-user-id'],
+                req.body['image-id']
+            ).then(result => res.json(result));
+        }
+        catch(err) {
+            util.handleError(err, res);
+        }
+    },
+
     async getImageController(req, res) {
         try {
             // Validate request fields
-            validator.validateRequest({
+            validatorService.validateRequest({
                 expectedHeaders: ['authorization'], actualHeaders: req.headers, intHeaders: false,
                 expectedQuery: ['image-id'], actualQuery: req.query
             });
@@ -58,7 +81,7 @@ module.exports = {
     async getImageInfoController(req, res) {
         try {
             // Validate request fields
-            validator.validateRequest({expectedHeaders: ['authorization'], actualHeaders: req.headers, intHeaders: false});
+            validatorService.validateRequest({expectedHeaders: ['authorization'], actualHeaders: req.headers, intHeaders: false});
 
             // Authenticate user
             userId = await authService.authenticateUser(req.headers['authorization']);
@@ -84,7 +107,7 @@ module.exports = {
     async deleteImageController(req, res) {
         try {
             // Validate request fields
-            validator.validateRequest({expectedHeaders: ['authorization'], actualHeaders: req.headers, intHeaders: false});
+            validatorService.validateRequest({expectedHeaders: ['authorization'], actualHeaders: req.headers, intHeaders: false});
 
             // Authenticate user
             userId = await authService.authenticateUser(req.headers['authorization']);

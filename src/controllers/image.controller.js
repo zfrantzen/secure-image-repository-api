@@ -104,6 +104,16 @@ module.exports = {
         }
     },
 
+    async getAllPublicImageInfoController(req, res) {
+        try {
+            // Execute query
+            await imageService.getAllImageInfoPublic().then(result => res.json(result));
+        }
+        catch(err) {
+            util.handleError(err, res);
+        }
+    },
+
     async deleteImageController(req, res) {
         try {
             // Validate request fields

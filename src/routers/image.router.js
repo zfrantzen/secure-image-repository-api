@@ -12,6 +12,8 @@ router.get('/image', multer.none(), imageWorker.getImageController);
 
 router.get('/image/info', multer.none(), imageWorker.getImageInfoController);
 
+router.get('/image/info/public', multer.none(), imageWorker.getAllPublicImageInfoController);
+
 router.delete('/image/:imageId', multer.none(), imageWorker.deleteImageController);
  
 module.exports = router;

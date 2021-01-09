@@ -120,7 +120,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             Image.findAll(
                 {
-                    attributes: ['id', 'name', 'type', 'isPrivate', 'createdAt'],
+                    attributes: ['id', 'name', 'type', 'userId', 'isPrivate', 'createdAt'],
                     where: {
                         id: imageId,
                         userId: userId
@@ -148,7 +148,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             Image.findAll(
                 {
-                    attributes: ['id', 'name', 'type', 'isPrivate', 'createdAt'],
+                    attributes: ['id', 'name', 'type', 'userId', 'isPrivate', 'createdAt'],
                     where: {
                         userId: userId
                     }
@@ -160,6 +160,28 @@ module.exports = {
                 }
         
                 resolve(formatter.formatResponse('User images found', data, response.SUCCESS));
+            }).catch(err => {
+                reject(formatter.formatResponse('Query Error!', err, response.GENERIC_SERVER_ERROR));
+            });
+        });
+    },
+
+    getAllImageInfoPublic() {
+        return new Promise((resolve, reject) => {
+            Image.findAll(
+                {
+                    attributes: ['id', 'name', 'type', 'userId', 'isPrivate', 'createdAt'],
+                    where: {
+                        isPrivate: false
+                    }
+                }
+            ).then(data => {
+                // Check if we found any data
+                if (data.length === 0) {
+                    reject(formatter.formatResponse('No public images found!', null, response.NOT_FOUND));
+                }
+        
+                resolve(formatter.formatResponse('Public images found', data, response.SUCCESS));
             }).catch(err => {
                 reject(formatter.formatResponse('Query Error!', err, response.GENERIC_SERVER_ERROR));
             });

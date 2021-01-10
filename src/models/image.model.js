@@ -1,5 +1,5 @@
-const sequelize = require('../config/db.connection.js').sequelize;
-var Sequelize = require('../config/db.connection.js').Sequelize;
+const sequelize = require('../config/db.config.js').sequelize;
+const Sequelize = require('../config/db.config.js').Sequelize;
 const User = require('./user.model.js');
 
 var Image = sequelize.define('image', {

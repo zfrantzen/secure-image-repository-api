@@ -15,14 +15,14 @@ module.exports = {
                     password: data.pwrd
                 }, response.SUCCESS));
             }).catch(err => {
-                reject(response.GENERIC_SERVER_ERROR).json(formatter.formatResponse('Query error', err));
+                reject(formatter.formatResponse('Query error', err));
             });
         });
     },
 
     getUser(userId) {
         return new Promise((resolve, reject) => {
-            User.findAll({
+            User.findOne({
                 where: {
                     id: userId
                 }
@@ -33,7 +33,7 @@ module.exports = {
 
                 resolve(formatter.formatResponse('User found', data, response.SUCCESS));
             }).catch(err => {
-                reject(response.GENERIC_SERVER_ERROR).json(formatter.formatResponse('Query error', err));
+                reject(formatter.formatResponse('Query error', err));
             });
         });
     },
@@ -43,7 +43,7 @@ module.exports = {
             User.findAll().then(data => {
                 resolve(formatter.formatResponse('All users', data, response.SUCCESS));
             }).catch(err => {
-                reject(response.GENERIC_SERVER_ERROR).json(formatter.formatResponse('Query error', err));
+                reject(formatter.formatResponse('Query error', err));
             });
         });
     }

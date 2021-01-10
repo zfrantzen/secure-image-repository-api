@@ -81,7 +81,7 @@ module.exports = {
         var imageBuffer;
         var foundData;
 
-        await Image.findAll({
+        await Image.findOne({
             where: {
                 id: imageId
             }
@@ -118,7 +118,7 @@ module.exports = {
 
     getSingleImageInfo(userId, imageId) {
         return new Promise((resolve, reject) => {
-            Image.findAll(
+            Image.findOne(
                 {
                     attributes: ['id', 'name', 'type', 'userId', 'isPrivate', 'createdAt'],
                     where: {

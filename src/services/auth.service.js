@@ -24,7 +24,7 @@ module.exports = {
         await userService.getUser(userId)
         .then(data => {
             // Check that the passwords match
-            if (password !== data.detail[0].dataValues.pwrd) {
+            if (password !== data.detail.dataValues.pwrd) {
                 throw formatter.formatResponse('User password is incorrect!',
                                                'Confirm password and try again',
                                                response.INVALID_REQUEST);

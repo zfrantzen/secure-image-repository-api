@@ -20,8 +20,8 @@ async function generateUserKey(userId) {
     await userService.getUser(userId)
         .then(data => {
             // Generate the user's key by adding the int of their password and int of their int creation date
-            let password = generateCharSum(data.detail[0].pwrd);
-            let datetime = Date.parse(data.detail[0]['createdAt']);
+            let password = generateCharSum(data.detail.pwrd);
+            let datetime = Date.parse(data.detail['createdAt']);
             sum = password + datetime;
         }, () => {
             throw ('User with userId=' + userId + ' could not be found!');

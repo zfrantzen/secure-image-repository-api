@@ -95,7 +95,7 @@ module.exports = {
             return new Promise((resolve, reject) => reject(formatter.formatResponse('No image with image-id=' + imageId + ' was found', null, response.NOT_FOUND)));
         }
 
-        const file = foundData[0].dataValues;
+        const file = foundData.dataValues;
         
         // Confirm file permissions
         if (!validatorService.hasImagePermission(file, userId)) {

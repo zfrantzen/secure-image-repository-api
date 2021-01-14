@@ -16,6 +16,11 @@ The Secure Image Repository API features encrypted private and non-encrypted pub
 3. Then you can manipulate the uploaded data (delete, list, transfer, download) using the various functions listed below in the API summary (i.e. download via `GET http://localhost:8080/image?imageId={imageId}`) 
 
 
+### How to run the tests
+- Execute `npm install` if you have not already done so
+- Execute `npm run test`
+
+
 ------
 ### API Summary
 - **General notes**:
@@ -24,7 +29,6 @@ The Secure Image Repository API features encrypted private and non-encrypted pub
         - If not using Postman, an example authentication entry located in the header is:
             - Actual value: `1:password` (repersenting userId=1 and userPassword=password)
             - Entry in header: `authorization: Basic MTpwYXNzd29yZA`
-    - Screenshots of common request operations in Postman can be found below this section
 
 #### User
 - `POST http://localhost:8080/user` 
@@ -40,7 +44,7 @@ The Secure Image Repository API features encrypted private and non-encrypted pub
     - Uploads a new image to the database. Returns the imageId of the uploaded image
     - **Request requirements**: 
         - Header: `authorization: Basic <credentials>` (requester's credentials, formatted `userId:password` encoded in Base64) 
-        - Body: `image` (file to upload), `is-private` (true or false, sets privacy permission)
+        - Body: `image` (file to upload), `is-private` (1 (true) or 0 (false), sets privacy permission)
 - `PUT http://localhost:8080/image/transfer`
     - Transfers an image owned by the requesting user to a target user
     - **Request requirements**:
@@ -65,6 +69,3 @@ The Secure Image Repository API features encrypted private and non-encrypted pub
     - Deletes an image with imageId of target-image-id from the database (if the requesting user has permission)
     - **Request requirements**:
         - Header: `authorization: Basic <credentials>` (requester's credentials, formatted `userId:password` encoded in Base64) 
-
-### Postman Request Screenshots
-TODO

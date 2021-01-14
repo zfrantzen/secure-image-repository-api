@@ -27,7 +27,7 @@ module.exports = {
             if (password !== data.detail.dataValues.pwrd) {
                 throw formatter.formatResponse('User password is incorrect!',
                                                'Confirm password and try again',
-                                               response.INVALID_REQUEST);
+                                               response.NO_PERMISSION);
             }
         }, () => {
             throw formatter.formatResponse('User with userId=' + userId + ' could not be found!',

@@ -20,5 +20,33 @@ module.exports = {
         type: 'test/jpeg',
         isPrivate: false,
         userId: 1
-    }
+    },
+
+    user2NonprivateMetadata: {
+        name: 'test2',
+        type: 'test/jpeg',
+        isPrivate: false,
+        userId: 2
+    },
+
+    user1PrivateMetadata: {
+        name: 'test1',
+        type: 'test/jpeg',
+        isPrivate: true,
+        userId: 1
+    },
+
+    user2PrivateMetadata: {
+        name: 'test2',
+        type: 'test/jpeg',
+        isPrivate: true,
+        userId: 2
+    },
+
+    user1PrivateMetadata2: {
+        name: 'test2',
+        type: 'test/jpeg',
+        isPrivate: true,
+        userId: 1
+    },
 };

@@ -1,21 +1,21 @@
 {
-  "name": "image-repo-web-app",
+  "name": "secure-image-repository-api",
   "version": "1.0.0",
-  "description": "A simple backend image repository web app hosted on Heroku powered by NodeJS and PostgreSQL",
+  "description": "Encrypted private and non-encrypted public image storage/sharing, user-to-user image transfer, and request authentication via user credentials. Powered by NodeJS (Express, Sequelize, Jest) and PostgreSQL",
   "main": "server.js",
   "scripts": {
     "test": "jest --silent --maxWorkers=1 --forceExit --verbose"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zfrantzen/image-repo-web-app.git"
+    "url": "git+https://github.com/zfrantzen/secure-image-repository-api.git"
   },
   "author": "Zane Frantzen",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zfrantzen/image-repo-web-app/issues"
+    "url": "https://github.com/zfrantzen/secure-image-repository-api/issues"
   },
-  "homepage": "https://github.com/zfrantzen/image-repo-web-app#readme",
+  "homepage": "https://github.com/zfrantzen/secure-image-repository-api#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",

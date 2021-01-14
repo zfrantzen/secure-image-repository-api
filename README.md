@@ -29,6 +29,7 @@ The Secure Image Repository API features encrypted private and non-encrypted pub
         - If not using Postman, an example authentication entry located in the header is:
             - Actual value: `1:password` (repersenting userId=1 and userPassword=password)
             - Entry in header: `authorization: Basic MTpwYXNzd29yZA`
+    - The database resets everytime the API is restarted. This is a configured setting in server.js and is intentional
 
 #### User
 - `POST http://localhost:8080/user` 

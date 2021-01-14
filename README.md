@@ -3,7 +3,7 @@ The Secure Image Repository API features encrypted private and non-encrypted pub
 
 
 ------
-### How to start the application locally
+### How to start the application locally (confirmed working on macOS)
 1. Excecute `npm install` (if you have not done so already)
 2. Start Docker and execute `docker run --name db -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres`
 3. Then, once the database is active, execute `npm start`

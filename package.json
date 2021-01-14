@@ -4,7 +4,7 @@
   "description": "A simple backend image repository web app hosted on Heroku powered by NodeJS and PostgreSQL",
   "main": "server.js",
   "scripts": {
-    "test": "jest --silent --maxWorkers=1 --forceExit --verbose"
+    "test": "jest --silent --maxWorkers=1 --forceExit --verbose --collectCoverage"
   },
   "repository": {
     "type": "git",

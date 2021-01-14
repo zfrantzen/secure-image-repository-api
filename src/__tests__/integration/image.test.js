@@ -5,9 +5,9 @@ const resConstants = require('../../constants/response.constants.js');
 
 const imageTestData = require('../../__tests_data__/image.test.data.js');
 const userTestData = require('../../__tests_data__/user.test.data.js');
-const dbConnection = require('../../config/db.connection.js');
 
-var mockDb
+var mockDb;
+require('../../config/db.connection.js');
 jest.mock('../../config/db.connection.js', () => {
     const SequelizeMock = require('sequelize-mock');
     mockDb = new SequelizeMock();
@@ -351,7 +351,7 @@ describe('GET /image/info/public (Get image metadata for all public images)', fu
         
         // Execute test
         const res = await request(app)
-            .get('/image/info')
+            .get('/image/info/public')
             .set({
                 'Accept': 'application/json',
                 'Authorization': 'Basic MTpwYXNzd29yZA'
@@ -360,7 +360,7 @@ describe('GET /image/info/public (Get image metadata for all public images)', fu
 
         // Check response
         expect(res.statusCode).toEqual(resConstants.SUCCESS);
-        expect(res.body.msg).toEqual('User images found');
+        expect(res.body.msg).toEqual('Public images found');
 
         expect(res.body.detail.length).toEqual(1);
         expect(res.body.detail[0].name).toEqual(imageTestData.user1NonprivateMetadata.name);
@@ -375,7 +375,7 @@ describe('GET /image/info/public (Get image metadata for all public images)', fu
         
         // Execute test
         const res = await request(app)
-            .get('/image/info')
+            .get('/image/info/public')
             .set({
                 'Accept': 'application/json',
                 'Authorization': 'Basic MjpwYXNzd29yZA'
@@ -384,7 +384,7 @@ describe('GET /image/info/public (Get image metadata for all public images)', fu
 
         // Check response
         expect(res.statusCode).toEqual(resConstants.SUCCESS);
-        expect(res.body.msg).toEqual('User images found');
+        expect(res.body.msg).toEqual('Public images found');
         
         expect(res.body.detail.length).toEqual(2);
         expect(res.body.detail[0].name).toEqual(imageTestData.user1NonprivateMetadata.name);
@@ -402,7 +402,7 @@ describe('GET /image/info/public (Get image metadata for all public images)', fu
         
         // Execute test
         const res = await request(app)
-            .get('/image/info')
+            .get('/image/info/public')
             .set({
                 'Accept': 'application/json',
                 'Authorization': 'Basic MTpwYXNzd29yZA'
@@ -411,7 +411,7 @@ describe('GET /image/info/public (Get image metadata for all public images)', fu
 
         // Check response
         expect(res.statusCode).toEqual(resConstants.NOT_FOUND);
-        expect(res.body.msg).toEqual('No images for user with userId=1 were found');
+        expect(res.body.msg).toEqual('No public images found!');
     });
 });
 
@@ -538,5 +538,21 @@ describe('POST /image (Uploads a new image to the db)', function() {
         expect(res.statusCode).toEqual(resConstants.SUCCESS);
         expect(res.body.msg).toEqual('Image successfully added');
         expect(res.body.detail.imageId).not.toEqual(undefined);
+    });
+
+    it('expect error (missing/invalid image file)', async function() {
+        // Execute test
+        const res = await request(app)
+            .post('/image')
+            .set({
+                'Accept': 'application/json',
+                'Authorization': 'Basic MTpwYXNzd29yZA'
+            })
+            .field('is-private', 0);
+
+        // Check response
+        expect(res.statusCode).toEqual(resConstants.INVALID_REQUEST);
+        expect(res.body.msg).toEqual('Request field error!');
+        expect(res.body.detail[0]).not.toEqual("Valid 'image' was expected as body parameter (via form-data), however, was not provided");
     });
 });

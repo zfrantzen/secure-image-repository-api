@@ -13,7 +13,7 @@ const db = require('./src/config/db.config.js');
 global.__basedir = __dirname;
   
 // Resets and clears the database when the application is started
-if (db.sequelize.options.dialect !== 'mock') {
+if ('mock' !== db.sequelize.options.dialect) {
   db.sequelize.sync({force: true}).then(() => {
     console.log('\n', '\n', '#### Resetting database and clearing all data. Ready to accept requests! ####', '\n', '\n');
   }); 
